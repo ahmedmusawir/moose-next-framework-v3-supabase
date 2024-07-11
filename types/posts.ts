@@ -1,10 +1,12 @@
+// types/posts.ts
 export interface Post {
-  id: string;
+  id: number;
   title: string;
   body: string;
   author: string;
-  date: string;
-  comments: PostComment[];
+  author_email: string;
+  date: Date; // Updated to Date type for Supabase (created_at)
+  comments?: PostComment[]; // Optional for now
 }
 
 export interface PostComment {

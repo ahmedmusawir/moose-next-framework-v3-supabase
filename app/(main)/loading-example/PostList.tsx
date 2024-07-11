@@ -1,7 +1,8 @@
 import Row from "@/components/common/Row";
 import { Post } from "@/types/posts";
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/posts`;
+// const BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/posts`;
+const BASE_URL = `https://jsonplaceholder.typicode.com/posts`;
 
 export const getItems = async () => {
   //Fake delay to show page loading spinner

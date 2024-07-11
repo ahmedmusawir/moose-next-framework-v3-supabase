@@ -35,10 +35,10 @@ const Sidebar = () => {
             <Newspaper className="mr-2 h-4 w-4" />
             <Link href="/posts">Posts</Link>
           </CommandItem>
-          <CommandItem>
+          {/* <CommandItem>
             <Folders className="mr-2 h-4 w-4" />
             <Link href="/jsonsrv">Json Server</Link>
-          </CommandItem>
+          </CommandItem> */}
         </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Settings">
