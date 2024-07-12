@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,29 +11,39 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
-import posts from "@/data/posts";
 import Link from "next/link";
 import { Post } from "@/types/posts";
+import PostDeleteModal from "./PostDeleteModal";
+import { usePostStore } from "@/store/usePostStore";
 
 interface PostsTableProps {
   limit?: number;
   title?: string;
+  posts?: Post[];
 }
 
-const PostsTable = ({ limit, title }: PostsTableProps) => {
-  // Sort posts in decending order based on data
-  const sortedPosts: Post[] = [...posts].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+const PostsTable = ({ limit, title, posts }: PostsTableProps) => {
+  const {
+    isModalOpen,
+    selectedPostId,
+    openModal,
+    closeModal,
+    removePost,
+    totalPosts,
+    getTotalPosts,
+  } = usePostStore();
 
-  // Filter posts to limit
-  const filteredPosts = limit ? sortedPosts.slice(0, limit) : sortedPosts;
+  useEffect(() => {
+    getTotalPosts();
+  }, [posts, getTotalPosts]);
 
   return (
     <div className="mt-10">
-      <h3 className="text-2xl mb-4 font-semibold">{title ? title : "Posts"}</h3>
+      <h3 className="text-2xl mb-4 font-semibold">
+        {title ? title : "Posts"} ({totalPosts})
+      </h3>
       <Table className="mb-8">
-        <TableCaption>A list of your recent posts.</TableCaption>
+        <TableCaption>A list of your recent JSON Server posts.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="">Title</TableHead>
@@ -40,20 +52,41 @@ const PostsTable = ({ limit, title }: PostsTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredPosts.map((post) => (
+          {posts?.map((post) => (
             <TableRow key={post.id}>
-              <TableCell>{post.title}</TableCell>
+              <TableCell>
+                <Link href={`/jsonsrv/${post.id}`}>
+                  {post.title} POST ID: {post.id}
+                </Link>
+              </TableCell>
               <TableCell>{post.author}</TableCell>
               <TableCell>{post.date}</TableCell>
               <TableCell className="text-right">
-                <Link href={`/posts/edit/${post.id}`}>
-                  <Button>Edit Post</Button>
+                <Link href={`/jsonsrv/edit/${post.id}`}>
+                  <Button className="dark:bg-gray-500">Edit Post</Button>
                 </Link>
+                <Button
+                  className="bg-red-400 text-white ml-2"
+                  onClick={() => openModal(post.id)}
+                >
+                  Delete
+                </Button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      {selectedPostId && (
+        <PostDeleteModal
+          isOpen={isModalOpen}
+          postId={selectedPostId}
+          onClose={closeModal}
+          onConfirm={async () => {
+            await removePost(selectedPostId);
+            closeModal();
+          }}
+        />
+      )}
     </div>
   );
 };

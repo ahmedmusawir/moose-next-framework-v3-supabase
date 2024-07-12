@@ -5,7 +5,7 @@ export interface Post {
   body: string;
   author: string;
   author_email: string;
-  date: Date; // Updated to Date type for Supabase (created_at)
+  date: string; // Updated to String type for Supabase (created_at)
   comments?: PostComment[]; // Optional for now
 }
 
