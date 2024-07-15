@@ -192,7 +192,7 @@ const RegisterForm = () => {
                   {error}
                 </div>
               )}
-              <Button className="w-full dark:bg-slate-800 dark:text-white">
+              <Button className="w-full bg-slate-700 text-white hover:bg-gray-900 dark:bg-slate-600 dark:text-white  dark:hover:bg-slate-600">
                 Signup
               </Button>
             </form>

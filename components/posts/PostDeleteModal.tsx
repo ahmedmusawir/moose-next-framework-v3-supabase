@@ -27,7 +27,7 @@ const PostDeleteModal = ({
       <DialogTrigger />
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Confirm Deletion</DialogTitle>
+          <DialogTitle>Confirm Deletion (POST)</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete this post {postId}? This action
             cannot be undone.

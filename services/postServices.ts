@@ -1,6 +1,6 @@
 const BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts`;
 
-// Fetches all the posts from the Supabase
+// Fetches all the posts from Supabase
 export const getPosts = async () => {
   const res = await fetch(BASE_URL, {
     method: "GET",
@@ -15,15 +15,14 @@ export const getPosts = async () => {
   }
 
   const data = await res.json();
-  // console.log("ONLY TOTAL DATA FROM SUPA", data.data.length);
   const totalPosts = data.data.length;
   return { data, totalPosts };
 };
 
 // Fetches a single post by id
-export const getSingle = async (id: string) => {
+export const getSingle = async (id: number) => {
   try {
-    const res = await fetch(`${BASE_URL}?id=${id}`, {
+    const res = await fetch(`${BASE_URL}/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +41,7 @@ export const getSingle = async (id: string) => {
   }
 };
 
-// Creates new post in the Supabase
+// Creates new post in Supabase
 export const createPost = async (data: any) => {
   const res = await fetch(BASE_URL, {
     method: "POST",
@@ -60,13 +59,13 @@ export const createPost = async (data: any) => {
 };
 
 // Edits post by id
-export const editPost = async (id: string, data: any) => {
+export const editPost = async (id: number, data: any) => {
   const res = await fetch(BASE_URL, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ id, ...data }),
   });
 
   if (!res.ok) {
@@ -77,7 +76,7 @@ export const editPost = async (id: string, data: any) => {
 };
 
 // Deletes post by id
-export const deletePost = async (postId: string) => {
+export const deletePost = async (postId: number) => {
   const res = await fetch(BASE_URL, {
     method: "DELETE",
     headers: {

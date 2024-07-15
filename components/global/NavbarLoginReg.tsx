@@ -5,7 +5,7 @@ import ThemeToggler from "./ThemeToggler";
 const NavbarLoginReg = () => {
   return (
     <>
-      <div className="bg-primary dark:bg-slate-700 py-2 px-5 flex justify-between">
+      <div className="bg-slate-700 dark:bg-slate-700 py-2 px-5 flex justify-between">
         <Link href={"/"}>
           <Image
             src={
@@ -21,13 +21,13 @@ const NavbarLoginReg = () => {
           <ThemeToggler />
         </div>
       </div>
-      <h1 className="text-center text-5xl mt-12">
+      {/* <h1 className="text-center text-5xl mt-12">
         Next.js 14, Shadcn, Tailwind, Supabase & Resend{" "}
         <small>(Email Service)</small>
       </h1>
       <h3 className="text-center text-3xl mt-12 -mb-[8rem]">
         Login/Logout, Registration, Middleware & Email Validation Setup
-      </h3>
+      </h3> */}
     </>
   );
 };

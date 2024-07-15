@@ -1,11 +1,31 @@
+"use client";
+
 import DashboardCard from "@/components/dashboard/DashboardCard";
-import PostPagination from "@/components/posts/PostPagination";
-import PostsTable from "@/components/posts/PostsTable";
+import PostPagination from "@/components/jsonsrv/PostPagination";
+import PostsTable from "@/components/jsonsrv/PostsTable";
 import { Button } from "@/components/ui/button";
+import { useJsonsrvPostStore } from "@/store/useJsonsrvPostStore";
+import { Post } from "@/types/posts";
 import { Folder, Folders, MessageCircle, Newspaper, User } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-export default function Dashboard() {
+interface PostPageContentProps {
+  initialPosts: Post[];
+  totalPosts: number;
+}
+
+export default function Dashboard({
+  initialPosts,
+  totalPosts,
+}: PostPageContentProps) {
+  const fetchPosts = useJsonsrvPostStore((state) => state.fetchPosts);
+  const posts = useJsonsrvPostStore((state) => state.posts);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
+
   return (
     <main className="">
       <div className="flex flex-col md:flex-row sm:flex-wrap justify-center gap-5 mb-5">
@@ -32,8 +52,8 @@ export default function Dashboard() {
           icon={<MessageCircle className="text-slate-500" size={72} />}
         />
       </div>
-      <PostsTable title="Latest Posts" limit={5} />
-      <PostPagination />
+      {/* <PostsTable title="Latest Posts" limit={5} /> */}
+      <PostsTable title="Featured Posts" limit={7} posts={posts} />
     </main>
   );
 }

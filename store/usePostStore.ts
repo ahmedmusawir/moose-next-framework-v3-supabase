@@ -4,7 +4,7 @@ import {
   createPost,
   editPost,
   deletePost,
-} from "@/services/jsonsrvPostServices";
+} from "@/services/postServices";
 import { Post } from "@/types/posts";
 
 interface PostState {

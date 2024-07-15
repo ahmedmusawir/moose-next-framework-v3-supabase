@@ -1,3 +1,5 @@
+"use client";
+
 import AuthTabs from "@/components/auth/AuthTabs";
 import React from "react";
 

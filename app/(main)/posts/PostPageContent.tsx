@@ -36,8 +36,10 @@ const PostPageContent = ({
   return (
     <>
       <BackButton text="Go Back" link="/" />
-      <Link className="float-end" href="/jsonsrv/insert">
-        <Button className="bg-green-500">Create New Post</Button>
+      <Link className="float-end" href="/posts/insert">
+        <Button className="bg-green-700 hover:bg-green-600">
+          Create New Post
+        </Button>
       </Link>
       <PostsTable title="Supabase Posts" limit={limit} posts={paginatedPosts} />
       <PostPagination

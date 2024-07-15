@@ -133,7 +133,7 @@ const LoginForm = () => {
                   {error}
                 </div>
               )}
-              <Button className="w-full dark:bg-slate-800 dark:text-white">
+              <Button className="w-full bg-slate-700 text-white dark:bg-slate-600 dark:text-white hover:bg-gray-900">
                 Login
               </Button>
             </form>

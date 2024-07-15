@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect } from "react";
 import {
   Table,
@@ -11,7 +13,6 @@ import {
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { Post } from "@/types/posts";
-import PostDeleteModal from "./PostDeleteModal";
 import { getFilteredAndSortedPosts } from "@/utils/jsonSrv/jsonsrvUtils";
 import { useJsonsrvPostStore } from "@/store/useJsonsrvPostStore";
 
@@ -22,15 +23,7 @@ interface PostsTableProps {
 }
 
 const PostsTable = ({ limit, title, posts }: PostsTableProps) => {
-  const {
-    isModalOpen,
-    selectedPostId,
-    openModal,
-    closeModal,
-    removePost,
-    totalPosts,
-    getTotalPosts,
-  } = useJsonsrvPostStore();
+  const { openModal, totalPosts, getTotalPosts } = useJsonsrvPostStore();
 
   // Sorting alphabetically with post limit
   const sortedFilteredPosts = getFilteredAndSortedPosts(posts, limit);
@@ -42,7 +35,7 @@ const PostsTable = ({ limit, title, posts }: PostsTableProps) => {
   return (
     <div className="mt-10">
       <h3 className="text-2xl mb-4 font-semibold">
-        {title ? title : "Posts"} ({totalPosts})
+        {title ? title : "Posts"} (7)
       </h3>
       <Table className="mb-8">
         <TableCaption>A list of your recent JSON Server posts.</TableCaption>
@@ -62,33 +55,22 @@ const PostsTable = ({ limit, title, posts }: PostsTableProps) => {
                 </Link>
               </TableCell>
               <TableCell>{post.author}</TableCell>
-              <TableCell>{post.date}</TableCell>
-              <TableCell className="text-right">
+              {/* <TableCell>{post.created_at}</TableCell> */}
+              {/* <TableCell className="text-right">
                 <Link href={`/jsonsrv/edit/${post.id}`}>
                   <Button>Edit Post</Button>
                 </Link>
                 <Button
                   className="bg-red-400 text-white ml-2"
-                  onClick={() => openModal(post.id)}
+                  // onClick={() => openModal(post.id)}
                 >
                   Delete
                 </Button>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      {selectedPostId && (
-        <PostDeleteModal
-          isOpen={isModalOpen}
-          postId={selectedPostId}
-          onClose={closeModal}
-          onConfirm={async () => {
-            await removePost(selectedPostId);
-            closeModal();
-          }}
-        />
-      )}
     </div>
   );
 };

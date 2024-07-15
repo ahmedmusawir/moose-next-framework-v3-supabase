@@ -14,7 +14,6 @@ interface PostState {
   selectedPostId: string | null;
   fetchPosts: () => Promise<void>;
   addPost: (post: Post) => Promise<void>;
-  editPost: (updatedPost: Post) => Promise<void>;
   removePost: (id: string) => Promise<void>;
   getTotalPosts: () => void;
   openModal: (id: string) => void;
@@ -46,20 +45,10 @@ export const useJsonsrvPostStore = create<PostState>((set, get) => ({
     get().getTotalPosts(); // Call getTotalPosts after adding a post
   },
 
-  editPost: async (updatedPost: Post) => {
-    const editedPost = await editPost(updatedPost.id, updatedPost);
-    set((state) => ({
-      posts: state.posts.map((post) =>
-        post.id === editedPost.id ? editedPost : post
-      ),
-    }));
-    get().getTotalPosts(); // Call getTotalPosts after editing a post
-  },
-
   removePost: async (id: string) => {
-    await deletePost(id);
+    // await deletePost(id);
     set((state) => ({
-      posts: state.posts.filter((post) => post.id !== id),
+      //   posts: state.posts.filter((post) => post.id !== id),
     }));
     get().getTotalPosts(); // Call getTotalPosts after removing a post
   },

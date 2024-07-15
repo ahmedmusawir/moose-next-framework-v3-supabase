@@ -15,6 +15,7 @@ import Link from "next/link";
 import { Post } from "@/types/posts";
 import PostDeleteModal from "./PostDeleteModal";
 import { usePostStore } from "@/store/usePostStore";
+import { formatDate } from "@/utils/common/commonUtils";
 
 interface PostsTableProps {
   limit?: number;
@@ -55,15 +56,17 @@ const PostsTable = ({ limit, title, posts }: PostsTableProps) => {
           {posts?.map((post) => (
             <TableRow key={post.id}>
               <TableCell>
-                <Link href={`/jsonsrv/${post.id}`}>
+                <Link href={`/posts/${post.id}`}>
                   {post.title} POST ID: {post.id}
                 </Link>
               </TableCell>
               <TableCell>{post.author}</TableCell>
-              <TableCell>{post.date}</TableCell>
+              <TableCell>{formatDate(post.created_at)}</TableCell>
               <TableCell className="text-right">
-                <Link href={`/jsonsrv/edit/${post.id}`}>
-                  <Button className="dark:bg-gray-500">Edit Post</Button>
+                <Link href={`/posts/edit/${post.id}`}>
+                  <Button className="bg-gray-400 hover:bg-gray-700 text-white dark:bg-gray-500">
+                    Edit Post
+                  </Button>
                 </Link>
                 <Button
                   className="bg-red-400 text-white ml-2"

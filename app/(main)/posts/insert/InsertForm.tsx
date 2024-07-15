@@ -19,10 +19,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { Post } from "@/types/posts";
 import { usePostStore } from "@/store/usePostStore";
 
-interface Props {
-  post: Post;
-}
-
 const formSchema = z.object({
   title: z.string().min(1, {
     message: "Title is required",
@@ -33,54 +29,44 @@ const formSchema = z.object({
   author: z.string().min(1, {
     message: "Author is required",
   }),
-  date: z.string().min(1, {
-    message: "Date is required",
-  }),
+  // date: z.string().min(1, {
+  //   message: "Date is required",
+  // }),
 });
 
-const EditForm = ({ post }: Props) => {
-  // console.log("Single Post Edit Form", post.title);
+const InsertForm = () => {
   const { toast } = useToast();
-  const editPost = usePostStore((state) => state.editPost);
-  const notFound = post === null;
+  const addPost = usePostStore((state) => state.addPost);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: post?.title || "",
-      body: post?.body || "",
-      author: post?.author || "",
-      date: post?.created_at || "",
+      title: "",
+      body: "",
+      author: "",
     },
   });
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await editPost({
-        ...post,
-        ...data,
-      });
+      await addPost(data as Post);
+      console.log("Post created:", data);
       toast({
-        title: "Post has been updated successfully",
-        description: `Updated by ${data.author} on ${data.date}`,
+        title: "Post created successfully",
+        description: `Updated by ${data.author}`,
       });
-    } catch (error) {
-      console.error("Error updating post:", error);
+    } catch (error: any) {
+      console.error("Error creating post:", error);
       toast({
-        title: "Error",
-        description: "Failed to update post",
+        title: "Error creating post",
+        description: error?.message,
       });
     }
   };
 
   return (
     <>
-      {notFound && (
-        <div className="bg-red-500 text-yellow-300 p-4 mb-4">
-          The Post Not Found
-        </div>
-      )}
-      <h1 className="text-2xl mb-4">Edit Form</h1>
+      <h1 className="text-2xl mb-4">Post Create Form</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
           <FormField
@@ -98,9 +84,7 @@ const EditForm = ({ post }: Props) => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  This is title of the Post {post?.id}
-                </FormDescription>
+                <FormDescription>This is title of the Post</FormDescription>
                 <FormMessage className="dark:text-red-300" />
               </FormItem>
             )}
@@ -122,7 +106,7 @@ const EditForm = ({ post }: Props) => {
                   />
                 </FormControl>
                 <FormDescription>
-                  This is the content of the Post {post?.id}
+                  This is the content of the Post
                 </FormDescription>
                 <FormMessage className="dark:text-red-300" />
               </FormItem>
@@ -144,13 +128,13 @@ const EditForm = ({ post }: Props) => {
                   />
                 </FormControl>
                 <FormDescription>
-                  This is the author of the Post {post?.id}
+                  This is the author of the Post
                 </FormDescription>
                 <FormMessage className="dark:text-red-300" />
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="date"
             render={({ field }) => (
@@ -165,15 +149,13 @@ const EditForm = ({ post }: Props) => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  This is the date of the Post {post?.id}
-                </FormDescription>
+                <FormDescription>This is the date of the Post</FormDescription>
                 <FormMessage className="dark:text-red-300" />
               </FormItem>
             )}
-          />
+          /> */}
           <Button className="w-full dark:bg-slate-800 dark:text-white">
-            Update Post
+            Create Post
           </Button>
         </form>
       </Form>
@@ -181,4 +163,4 @@ const EditForm = ({ post }: Props) => {
   );
 };
 
-export default EditForm;
+export default InsertForm;

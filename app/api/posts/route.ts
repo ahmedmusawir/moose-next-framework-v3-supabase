@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
-import { Post } from "@/types/posts";
 
 // Handle GET requests - Fetch all posts
 export async function GET() {
   const supabase = createClient();
-  const { data, error } = await supabase.from("posts").select("*");
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .order("created_at", { ascending: false });
+  // Sorting by created_at in descending order
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });

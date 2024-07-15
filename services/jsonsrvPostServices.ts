@@ -1,4 +1,5 @@
-const BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/posts`;
+// const BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/posts`;
+const BASE_URL = `https://jsonplaceholder.typicode.com/posts`;
 
 // Fetches all the posts from the json server
 export const getPosts = async () => {
@@ -23,7 +24,7 @@ export const getPosts = async () => {
 };
 
 // Fetches a single post by id (THIS IS FOR ADMIN PORTAL WHERE NO NEED FOR CACHING)
-export const getSingle = async (id: string) => {
+export const getSingle = async (id: number) => {
   try {
     const res = await fetch(`${BASE_URL}/${id}`, {
       method: "GET",
@@ -103,7 +104,7 @@ export const editPost = async (id: string, data: any) => {
 };
 
 // Deletes post by id
-export const deletePost = async (postId: string) => {
+export const deletePost = async (postId: number) => {
   const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
   const res = await fetch(`${BASE_URL}/posts/${postId}`, {
     method: "DELETE",
