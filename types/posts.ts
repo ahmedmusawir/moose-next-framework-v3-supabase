@@ -1,4 +1,9 @@
 // types/posts.ts
+export interface Results {
+  data: Post[];
+  message: string;
+}
+
 export interface Post {
   id: number;
   title: string;

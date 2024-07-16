@@ -17,7 +17,9 @@ const SinglePostContent = ({ post }: SinglePostContentProps) => {
       <Page className={""} FULL={false}>
         <Row className="">
           <h1 className="h1 mb-5">{post.title}</h1>
-          <h5 className="italic text-gray-500 mb-5">Created on: {post.date}</h5>
+          <h5 className="italic text-gray-500 mb-5">
+            Created on: {post.created_at}
+          </h5>
           <p className="mb-5">{post.body}</p>
           <h5 className="italic">By {post.author}</h5>
           <h3 className="h3 mt-6">Comments</h3>

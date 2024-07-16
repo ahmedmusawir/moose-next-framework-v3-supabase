@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Pagination,
   PaginationContent,
@@ -18,18 +16,16 @@ interface PostPaginationProps {
 
 const PostPagination = ({
   currentPage,
-  totalPages = 0,
+  totalPages,
   setCurrentPage,
 }: PostPaginationProps) => {
-  const handlePrevious = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
+  const handlePrevious = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
   };
 
-  const handleNext = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
+  const handleNext = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
@@ -46,17 +42,14 @@ const PostPagination = ({
           />
         </PaginationItem>
         <PaginationItem>
-          {[...Array(Math.max(totalPages, 0))].map((_, index) => (
+          {[...Array(Math.max(totalPages, 1))].map((_, index) => (
             <PaginationLink
               key={index}
               href="#"
               className={
                 currentPage === index + 1 ? "bg-red-500 text-white" : ""
               }
-              onClick={(event) => {
-                event.preventDefault();
-                setCurrentPage(index + 1);
-              }}
+              onClick={() => setCurrentPage(index + 1)}
             >
               {index + 1}
             </PaginationLink>

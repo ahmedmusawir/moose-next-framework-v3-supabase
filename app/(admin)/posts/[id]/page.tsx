@@ -10,15 +10,15 @@ interface SinglePostPageProps {
 }
 
 // This is for SSG during build time
-export const generateStaticParams = async () => {
-  const results = await getPosts();
-  const posts: Post[] | null = results.data.data;
-  // console.log("Single Post Page", results.data.data);
+// export const generateStaticParams = async () => {
+//   const results = await getPosts();
+//   const posts: Post[] | null = results.data.data;
+//   // console.log("Single Post Page", results.data.data);
 
-  return posts?.map((post: { id: number }) => ({
-    params: { id: post.id.toString() },
-  }));
-};
+//   return posts?.map((post: { id: number }) => ({
+//     params: { id: post.id.toString() },
+//   }));
+// };
 
 const SinglePostPage = async ({ params }: SinglePostPageProps) => {
   const result = await getSingle(params.id);

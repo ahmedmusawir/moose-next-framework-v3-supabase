@@ -10,15 +10,7 @@ import { Folder, Folders, MessageCircle, Newspaper, User } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-interface PostPageContentProps {
-  initialPosts: Post[];
-  totalPosts: number;
-}
-
-export default function Dashboard({
-  initialPosts,
-  totalPosts,
-}: PostPageContentProps) {
+export default function Dashboard() {
   const fetchPosts = useJsonsrvPostStore((state) => state.fetchPosts);
   const posts = useJsonsrvPostStore((state) => state.posts);
 
@@ -52,7 +44,6 @@ export default function Dashboard({
           icon={<MessageCircle className="text-slate-500" size={72} />}
         />
       </div>
-      {/* <PostsTable title="Latest Posts" limit={5} /> */}
       <PostsTable title="Featured Posts" limit={7} posts={posts} />
     </main>
   );

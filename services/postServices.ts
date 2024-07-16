@@ -16,7 +16,8 @@ export const getPosts = async () => {
 
   const data = await res.json();
   const totalPosts = data.data.length;
-  return { data, totalPosts };
+  const posts = data?.data;
+  return { posts, totalPosts };
 };
 
 // Fetches a single post by id

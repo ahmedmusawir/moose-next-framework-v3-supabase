@@ -37,8 +37,8 @@ export const usePostStore = create<PostState>((set, get) => ({
   },
 
   fetchPosts: async () => {
-    const { posts, totalPosts } = await getPosts();
-    set({ posts, totalPosts });
+    const { data, totalPosts } = await getPosts();
+    set({ posts: data, totalPosts });
   },
 
   addPost: async (post: Post) => {

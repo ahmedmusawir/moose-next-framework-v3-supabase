@@ -33,9 +33,9 @@ const formSchema = z.object({
   author: z.string().min(1, {
     message: "Author is required",
   }),
-  date: z.string().min(1, {
-    message: "Date is required",
-  }),
+  // date: z.string().min(1, {
+  //   message: "Date is required",
+  // }),
 });
 
 const EditForm = ({ post }: Props) => {
@@ -50,7 +50,7 @@ const EditForm = ({ post }: Props) => {
       title: post?.title || "",
       body: post?.body || "",
       author: post?.author || "",
-      date: post?.created_at || "",
+      // date: post?.created_at || "",
     },
   });
 
@@ -62,7 +62,7 @@ const EditForm = ({ post }: Props) => {
       });
       toast({
         title: "Post has been updated successfully",
-        description: `Updated by ${data.author} on ${data.date}`,
+        description: `Updated by ${data.author}`,
       });
     } catch (error) {
       console.error("Error updating post:", error);
@@ -150,7 +150,7 @@ const EditForm = ({ post }: Props) => {
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="date"
             render={({ field }) => (
@@ -171,7 +171,7 @@ const EditForm = ({ post }: Props) => {
                 <FormMessage className="dark:text-red-300" />
               </FormItem>
             )}
-          />
+          /> */}
           <Button className="w-full dark:bg-slate-800 dark:text-white">
             Update Post
           </Button>
