@@ -60,16 +60,6 @@ const EditForm = ({ postId }: Props) => {
     },
   });
 
-  useEffect(() => {
-    if (post) {
-      form.reset({
-        title: post.title,
-        body: post.body,
-        author: post.author,
-      });
-    }
-  }, [post, form]);
-
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await editPost({

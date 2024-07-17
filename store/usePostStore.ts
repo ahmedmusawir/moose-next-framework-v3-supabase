@@ -4,16 +4,18 @@ import {
   createPost,
   editPost,
   deletePost,
+  getSingle,
 } from "@/services/postServices";
 import { Post } from "@/types/posts";
 
 interface PostState {
+  post: Post | null;
   posts: Post[];
   totalPosts: number;
   isModalOpen: boolean;
   selectedPostId: string | null;
-  actionTrigger: boolean;
   fetchPosts: () => Promise<void>;
+  fetchSinglePost: (id: number) => Promise<void>;
   addPost: (post: Post) => Promise<void>;
   editPost: (updatedPost: Post) => Promise<void>;
   removePost: (id: number) => Promise<void>;
@@ -24,11 +26,11 @@ interface PostState {
 }
 
 export const usePostStore = create<PostState>((set, get) => ({
+  post: null,
   posts: [],
   totalPosts: 0,
   isModalOpen: false,
   selectedPostId: null,
-  actionTrigger: false,
 
   getTotalPosts: () => {
     set((state) => ({
@@ -41,11 +43,17 @@ export const usePostStore = create<PostState>((set, get) => ({
     set({ posts, totalPosts });
   },
 
+  fetchSinglePost: async (id: number) => {
+    const result = await getSingle(id);
+    const post = result?.data ?? null;
+
+    set({ post });
+  },
+
   addPost: async (post: Post) => {
     const { data: newPost } = await createPost(post);
     set((state) => ({
       posts: [...state.posts, newPost],
-      actionTrigger: !state.actionTrigger,
     }));
     get().getTotalPosts();
   },
@@ -56,7 +64,6 @@ export const usePostStore = create<PostState>((set, get) => ({
       posts: state.posts.map((post) =>
         post.id === editedPost.id ? editedPost : post
       ),
-      actionTrigger: !state.actionTrigger,
     }));
     get().getTotalPosts();
   },
@@ -65,7 +72,6 @@ export const usePostStore = create<PostState>((set, get) => ({
     await deletePost(id);
     set((state) => ({
       posts: state.posts.filter((post) => post.id !== id),
-      actionTrigger: !state.actionTrigger,
     }));
     get().getTotalPosts();
   },

@@ -1,7 +1,8 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,8 +17,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
+import { getSingle } from "@/services/postServices";
+import { Post } from "@/types/posts";
 import { usePostStore } from "@/store/usePostStore";
-import { useEffect } from "react";
+import Loading from "./loading";
 
 interface Props {
   postId: number;
@@ -33,23 +36,22 @@ const formSchema = z.object({
   author: z.string().min(1, {
     message: "Author is required",
   }),
-  // date: z.string().min(1, {
-  //   message: "Date is required",
-  // }),
 });
 
 const EditForm = ({ postId }: Props) => {
-  const fetchSinglePost = usePostStore((state) => state.fetchSinglePost);
-  const post = usePostStore((state) => state.post);
   const { toast } = useToast();
   const editPost = usePostStore((state) => state.editPost);
-  const notFound = post === null;
-
-  console.log("Single Post Edit Form:", post);
+  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchSinglePost(postId);
-  }, [fetchSinglePost, postId]);
+    const fetchPost = async () => {
+      const result = await getSingle(postId);
+      setPost(result?.data ?? null);
+      setLoading(false);
+    };
+    fetchPost();
+  }, [postId]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -75,9 +77,9 @@ const EditForm = ({ postId }: Props) => {
       await editPost({
         ...post,
         ...data,
-        id: post!.id, // Ensure that id is definitely present
-        author_email: post!.author_email || "", // Ensure that author_email is a string
-        created_at: post!.created_at || "", // Ensure that created_at is a string
+        id: post!.id,
+        author_email: post!.author_email || "",
+        created_at: post!.created_at || "",
       });
       toast({
         title: "Post has been updated successfully",
@@ -92,13 +94,24 @@ const EditForm = ({ postId }: Props) => {
     }
   };
 
+  if (loading) {
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
+  }
+
+  if (!post) {
+    return (
+      <div className="bg-red-500 text-yellow-300 p-4 mb-4">
+        The Post Not Found
+      </div>
+    );
+  }
+
   return (
     <>
-      {notFound && (
-        <div className="bg-red-500 text-yellow-300 p-4 mb-4">
-          The Post Not Found
-        </div>
-      )}
       <h1 className="text-2xl mb-4">Edit Form</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
@@ -169,28 +182,6 @@ const EditForm = ({ postId }: Props) => {
               </FormItem>
             )}
           />
-          {/* <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text.white">
-                  Date
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className="p-6 bg-slate-100 dark:bg-slate-500 dark:text-white"
-                    placeholder="Enter Date"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  This is the date of the Post {post?.id}
-                </FormDescription>
-                <FormMessage className="dark:text-red-300" />
-              </FormItem>
-            )}
-          /> */}
           <Button className="w-full dark:bg-slate-800 dark:text-white">
             Update Post
           </Button>

@@ -16,11 +16,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
+import { Post } from "@/types/posts";
 import { usePostStore } from "@/store/usePostStore";
-import { useEffect } from "react";
 
 interface Props {
-  postId: number;
+  post: Post;
 }
 
 const formSchema = z.object({
@@ -38,18 +38,11 @@ const formSchema = z.object({
   // }),
 });
 
-const EditForm = ({ postId }: Props) => {
-  const fetchSinglePost = usePostStore((state) => state.fetchSinglePost);
-  const post = usePostStore((state) => state.post);
+const EditForm = ({ post }: Props) => {
+  // console.log("Single Post Edit Form", post.title);
   const { toast } = useToast();
   const editPost = usePostStore((state) => state.editPost);
   const notFound = post === null;
-
-  console.log("Single Post Edit Form:", post);
-
-  useEffect(() => {
-    fetchSinglePost(postId);
-  }, [fetchSinglePost, postId]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,27 +50,15 @@ const EditForm = ({ postId }: Props) => {
       title: post?.title || "",
       body: post?.body || "",
       author: post?.author || "",
+      // date: post?.created_at || "",
     },
   });
-
-  useEffect(() => {
-    if (post) {
-      form.reset({
-        title: post.title,
-        body: post.body,
-        author: post.author,
-      });
-    }
-  }, [post, form]);
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await editPost({
         ...post,
         ...data,
-        id: post!.id, // Ensure that id is definitely present
-        author_email: post!.author_email || "", // Ensure that author_email is a string
-        created_at: post!.created_at || "", // Ensure that created_at is a string
       });
       toast({
         title: "Post has been updated successfully",
