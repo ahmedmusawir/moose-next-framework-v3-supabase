@@ -13,14 +13,14 @@ interface PostState {
   posts: Post[];
   totalPosts: number;
   isModalOpen: boolean;
-  selectedPostId: string | null;
+  selectedPostId: number | null;
   fetchPosts: () => Promise<void>;
   fetchSinglePost: (id: number) => Promise<void>;
   addPost: (post: Post) => Promise<void>;
   editPost: (updatedPost: Post) => Promise<void>;
   removePost: (id: number) => Promise<void>;
   getTotalPosts: () => void;
-  openModal: (id: string) => void;
+  openModal: (id: number) => void;
   closeModal: () => void;
   setPosts: (posts: Post[]) => void;
 }
@@ -76,7 +76,7 @@ export const usePostStore = create<PostState>((set, get) => ({
     get().getTotalPosts();
   },
 
-  openModal: (id: string) => {
+  openModal: (id: number) => {
     set({ isModalOpen: true, selectedPostId: id });
   },
 
