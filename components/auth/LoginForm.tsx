@@ -63,7 +63,7 @@ const LoginForm = () => {
     console.log("Login Submitted by the Moose...", response);
 
     if (response.ok) {
-      router.push("/");
+      router.push("/dashboard");
     } else {
       const result = await response.json();
       console.error("Login error:", result.error);

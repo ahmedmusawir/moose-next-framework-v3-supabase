@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import BackButton from "@/components/common/BackButton";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { usePostStore } from "@/store/usePostStore";
 import PostsTable from "@/components/posts/PostsTable";
 import PostPagination from "@/components/posts/PostPagination";
+import Loading from "./loading";
 
 const PostPageContent = () => {
   const fetchPosts = usePostStore((state) => state.fetchPosts);
@@ -36,12 +37,18 @@ const PostPageContent = () => {
           Create New Post
         </Button>
       </Link>
-      <PostsTable title="Supabase Posts" limit={limit} posts={paginatedPosts} />
-      <PostPagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        setCurrentPage={setCurrentPage}
-      />
+      <Suspense fallback={<Loading />}>
+        <PostsTable
+          title="Supabase Posts"
+          limit={limit}
+          posts={paginatedPosts}
+        />
+        <PostPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          setCurrentPage={setCurrentPage}
+        />
+      </Suspense>
     </>
   );
 };
