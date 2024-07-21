@@ -11,6 +11,7 @@ export default async function MainLayout({
 }) {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
+  // console.log("DEFAULT SUPER ADMIN: ", data.user?.email);
 
   // if (error || !data.user) {
   //   redirect("/auth");
