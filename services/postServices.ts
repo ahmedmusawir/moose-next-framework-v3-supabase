@@ -21,30 +21,6 @@ export const getPosts = async () => {
 };
 
 // Fetches a single post by id
-// export const getSingle = async (id: number) => {
-//   try {
-//     const res = await fetch(`${BASE_URL}/${id}`, {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       next: {
-//         revalidate: 0,
-//       },
-//       cache: "no-store",
-//     });
-
-//     if (!res.ok) {
-//       throw new Error(`Failed to fetch post with id: ${id}`);
-//     }
-
-//     return res.json();
-//   } catch (error) {
-//     console.error(error);
-//     return null; // Return null or a specific error flag
-//   }
-// };
-
 export const getSingle = async (id: number) => {
   try {
     const res = await fetch(`${BASE_URL}/${id}`, {
