@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import Navbar from "@/components/global/Navbar";
 import Sidebar from "@/components/layout/Sidebar";
 
-export default async function MainLayout({
+export default async function MemberLayout({
   children,
 }: {
   children: ReactNode;
@@ -12,8 +12,19 @@ export default async function MainLayout({
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
 
+  // // Protecting from non-logged in public user
   // if (error || !data.user) {
   //   redirect("/auth");
+  //   return null;
+  // }
+
+  // // Protecting from logged in other types of users
+  // const roles = data.user.user_metadata;
+  // console.log("USER METADATA IN MEMBER LAYOUT", roles);
+
+  // if (roles.is_qr_member !== 1) {
+  //   redirect("/auth");
+  //   return null;
   // }
 
   return (

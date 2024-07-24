@@ -56,6 +56,10 @@ const LoginForm = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Cache-Control":
+          "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+        Pragma: "no-cache",
+        Expires: "0",
       },
       body: JSON.stringify(data),
     });
@@ -63,7 +67,21 @@ const LoginForm = () => {
     console.log("Login Submitted by the Moose...", response);
 
     if (response.ok) {
-      router.push("/dashboard");
+      const result = await response.json();
+      const user = result.data.user;
+      console.log("User Object after Login:", user);
+      const roles = user.user_metadata; // Fetching the roles from user metadata
+
+      // Role-based redirection logic
+      if (roles.is_qr_superadmin === 1) {
+        router.push("/superadmin-portal");
+      } else if (roles.is_qr_admin === 1) {
+        router.push("/dashboard");
+      } else if (roles.is_qr_member === 1) {
+        router.push("/members-portal");
+      } else {
+        router.push("/"); // Fallback in case no roles match
+      }
     } else {
       const result = await response.json();
       console.error("Login error:", result.error);

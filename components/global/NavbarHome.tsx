@@ -18,7 +18,7 @@ import { User as SupabaseUser } from "@supabase/auth-js";
 import { createClient } from "@/utils/supabase/client";
 import { usePathname } from "next/navigation";
 
-const NavbarSuperadmin = () => {
+const NavbarHome = () => {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const supabase = createClient();
   const pathname = usePathname();
@@ -70,7 +70,7 @@ const NavbarSuperadmin = () => {
 
   return (
     <div className="bg-slate-700 dark:bg-slate-700 py-2 px-5 flex justify-between">
-      <Link href={"/"}>
+      <Link href={"/superadmin-portal"}>
         <Image
           src={
             "https://res.cloudinary.com/dyb0qa58h/image/upload/v1696245158/company-4-logo_syxli0.png"
@@ -80,15 +80,15 @@ const NavbarSuperadmin = () => {
           height={40}
         />
       </Link>
-      <Link href={"/superadmin-portal"}>
-        <h5 className="mt-2 ml-1">Super Admin Portal</h5>
+      <Link href={"/"}>
+        <h5 className="mt-2 ml-1">Public Home</h5>
       </Link>
 
       {/* NAVIGATION */}
       <nav className="hidden sm:ml-6 sm:flex flex-grow justify-center items-center">
-        <NavLink href="/add-user">Add User</NavLink>
-        {/* <NavLink href="/loading-example">Suspension Test</NavLink> */}
-        {/* <NavLink href="/xxx">Global 404</NavLink> */}
+        <NavLink href="/members-portal">Members' Portal</NavLink>
+        <NavLink href="/dashboard">Admin Portal</NavLink>
+        <NavLink href="/superadmin-portal">Super Admin Portal</NavLink>
       </nav>
 
       {/* DARK MODE BUTTON */}
@@ -125,4 +125,4 @@ const NavbarSuperadmin = () => {
   );
 };
 
-export default NavbarSuperadmin;
+export default NavbarHome;

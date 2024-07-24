@@ -5,7 +5,7 @@ import Navbar from "@/components/global/Navbar";
 import Sidebar from "@/components/layout/Sidebar";
 import NavbarSuperadmin from "@/components/global/NavbarSuperadmin";
 
-export default async function MainLayout({
+export default async function SuperadminLayout({
   children,
 }: {
   children: ReactNode;
@@ -14,8 +14,18 @@ export default async function MainLayout({
   const { data, error } = await supabase.auth.getUser();
   // console.log("DEFAULT SUPER ADMIN: ", data.user?.email);
 
+  // Protecting from non-logged in public user
   // if (error || !data.user) {
   //   redirect("/auth");
+  // }
+
+  // Protecting from logged in other types of users
+  // const roles = data.user.user_metadata;
+  // console.log("USER METADATA IN SUPERADMIN LAYOUT", roles);
+
+  // if (roles.is_qr_superadmin !== 1) {
+  //   redirect("/auth");
+  //   return null;
   // }
 
   return (

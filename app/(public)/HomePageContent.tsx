@@ -12,7 +12,7 @@ const HomePageContent = () => {
       </Head>
       <Page className={""} FULL={false}>
         <Row className="prose max-w-3xl mx-auto">
-          <h1 className="h1">This is HomePageContent (Public)</h1>
+          <h1 className="h1">Home Page (Public)</h1>
           <h2 className="h2">
             Lorem ipsum dolor, sit amet consectetur adipisicing elit
           </h2>

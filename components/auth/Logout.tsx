@@ -1,9 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const Logout = () => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     const response = await fetch("/api/auth/logout", {
@@ -17,6 +19,10 @@ const Logout = () => {
       console.error("Logout error:", result.error);
     }
   };
+
+  useEffect(() => {
+    router.replace(pathname);
+  }, [router, pathname]);
 
   return <div onClick={handleLogout}>Logout</div>;
 };
