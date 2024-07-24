@@ -1,5 +1,9 @@
 # moose-next-framework-v3-supabase
 
+# DO NOT USE THIS! NEXT.JS 14 IS A PIECE OF OVER-CACHED SHIT!
+
+## USE v4.0 BASED ON NEXT.JS 13 - STABLE
+
 The v3.0 of the New Moose Next Framework w/ Tailwind, Shadcn, Zustand &amp; Supabase
 
 ## Coverd in v3
