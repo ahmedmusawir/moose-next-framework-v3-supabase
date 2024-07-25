@@ -22,7 +22,6 @@ import {
   CardTitle,
 } from "../ui/card";
 import { useState } from "react";
-import { useAuthStore } from "@/store/useAuthStore";
 
 const formSchema = z.object({
   email: z
@@ -40,7 +39,6 @@ const formSchema = z.object({
 
 const LoginForm = () => {
   const [error, setError] = useState<string | null>(null);
-  const login = useAuthStore((state) => state.login);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,9 +51,26 @@ const LoginForm = () => {
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     setError(null); // Reset error state before submission
 
-    try {
-      await login(data.email, data.password);
-      const roles = useAuthStore.getState().roles;
+    //Login API call
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control":
+          "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+      body: JSON.stringify(data),
+    });
+
+    console.log("Login Submitted by the Moose...", response);
+
+    if (response.ok) {
+      const result = await response.json();
+      const user = result.data.user;
+      console.log("User Object after Login:", user);
+      const roles = user.user_metadata; // Fetching the roles from user metadata
 
       // Role-based redirection logic
       if (roles.is_qr_superadmin === 1) {
@@ -67,9 +82,10 @@ const LoginForm = () => {
       } else {
         router.push("/"); // Fallback in case no roles match
       }
-    } catch (error: any) {
-      console.error("Login error:", error.message);
-      setError(error.message); // Set the error state
+    } else {
+      const result = await response.json();
+      console.error("Login error:", result.error);
+      setError(result.error); // Set the error state
     }
   };
 

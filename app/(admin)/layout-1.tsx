@@ -1,15 +1,18 @@
-"use client";
-
 import { ReactNode } from "react";
+import { redirect } from "next/navigation";
+import { createClient } from "@/utils/supabase/server";
 import Navbar from "@/components/global/Navbar";
-import withAdminProtection from "@/hoc/withAdminProtection";
 import Sidebar from "@/components/layout/Sidebar";
 
-interface LayoutProps {
+export default async function AdminLayout({
+  children,
+}: {
   children: ReactNode;
-}
+}) {
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.getUser();
+  // console.log("User Object:", data.user);
 
-const AdminLayout = ({ children }: LayoutProps) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -21,6 +24,4 @@ const AdminLayout = ({ children }: LayoutProps) => {
       </div>
     </div>
   );
-};
-
-export default withAdminProtection(AdminLayout);
+}
