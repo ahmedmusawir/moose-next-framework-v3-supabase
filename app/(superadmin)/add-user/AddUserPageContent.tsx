@@ -20,7 +20,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "@/components/ui/card";
 import { useState } from "react";
 
 const formSchema = z
@@ -42,13 +42,16 @@ const formSchema = z
     passwordConfirm: z.string().min(1, {
       message: "Password confirmation is required",
     }),
+    role: z.string().min(1, {
+      message: "User type is required",
+    }),
   })
   .refine((data) => data.password === data.passwordConfirm, {
     message: "Passwords don't match",
     path: ["passwordConfirm"], // Path where the error message will be displayed
   });
 
-const RegisterForm = () => {
+const AddUserForm = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -59,6 +62,7 @@ const RegisterForm = () => {
       email: "",
       password: "",
       passwordConfirm: "",
+      role: "",
     },
   });
 
@@ -67,10 +71,18 @@ const RegisterForm = () => {
       name: data.name,
       is_qr_superadmin: 0,
       is_qr_admin: 0,
-      is_qr_member: 1,
+      is_qr_member: 0,
     };
 
-    const response = await fetch("/api/auth/signup", {
+    if (data.role === "superadmin") {
+      user_metadata.is_qr_superadmin = 1;
+    } else if (data.role === "admin") {
+      user_metadata.is_qr_admin = 1;
+    } else if (data.role === "member") {
+      user_metadata.is_qr_member = 1;
+    }
+
+    const response = await fetch("/api/auth/superadmin-add-user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -85,7 +97,7 @@ const RegisterForm = () => {
     console.log("Signup Response: ", response);
 
     if (response.ok) {
-      router.push("/dashboard");
+      router.push("/superadmin-portal"); // Redirect to the superadmin dashboard after user creation
     } else {
       const result = await response.json();
       console.error("Signup error:", result.error);
@@ -97,9 +109,9 @@ const RegisterForm = () => {
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Signup</CardTitle>
+          <CardTitle>Add User</CardTitle>
           <CardDescription>
-            Register your account with your credentials
+            Register a new user with their credentials
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
@@ -120,11 +132,10 @@ const RegisterForm = () => {
                       <Input
                         type="text"
                         className="p-6 bg-slate-100 dark:bg-slate-500 dark:text-white"
-                        placeholder="Please Enter Email"
+                        placeholder="Please Enter Name"
                         {...field}
                       />
                     </FormControl>
-
                     <FormMessage className="dark:text-red-300" />
                   </FormItem>
                 )}
@@ -145,7 +156,6 @@ const RegisterForm = () => {
                         {...field}
                       />
                     </FormControl>
-
                     <FormMessage className="dark:text-red-300" />
                   </FormItem>
                 )}
@@ -162,11 +172,10 @@ const RegisterForm = () => {
                       <Input
                         type="password"
                         className="p-6 bg-slate-100 dark:bg-slate-500 dark:text-white"
-                        placeholder="Please Enter password"
+                        placeholder="Please Enter Password"
                         {...field}
                       />
                     </FormControl>
-
                     <FormMessage className="dark:text-red-300" />
                   </FormItem>
                 )}
@@ -177,17 +186,39 @@ const RegisterForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text.white">
-                      Password
+                      Confirm Password
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="password"
                         className="p-6 bg-slate-100 dark:bg-slate-500 dark:text-white"
-                        placeholder="Please Enter password"
+                        placeholder="Please Confirm Password"
                         {...field}
                       />
                     </FormControl>
-
+                    <FormMessage className="dark:text-red-300" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text.white mr-5">
+                      User Type
+                    </FormLabel>
+                    <FormControl>
+                      <select
+                        className="p-6 bg-slate-100 dark:bg-slate-500 dark:text-white"
+                        {...field}
+                      >
+                        <option value="">Choose a user type</option>
+                        <option value="superadmin">Super Admin</option>
+                        <option value="admin">Admin</option>
+                        <option value="member">Member</option>
+                      </select>
+                    </FormControl>
                     <FormMessage className="dark:text-red-300" />
                   </FormItem>
                 )}
@@ -198,7 +229,7 @@ const RegisterForm = () => {
                 </div>
               )}
               <Button className="w-full bg-slate-700 text-white hover:bg-gray-900 dark:bg-slate-600 dark:text-white  dark:hover:bg-slate-600">
-                Signup
+                Add User
               </Button>
             </form>
           </Form>
@@ -208,4 +239,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default AddUserForm;

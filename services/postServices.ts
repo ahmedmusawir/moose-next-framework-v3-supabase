@@ -20,7 +20,10 @@ export const getPosts = async () => {
   return { posts, totalPosts };
 };
 
+<<<<<<< HEAD
 // Fetches a single post by id
+=======
+>>>>>>> role_access
 export const getSingle = async (id: number) => {
   try {
     const res = await fetch(`${BASE_URL}/${id}`, {

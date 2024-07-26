@@ -8,9 +8,12 @@ import { useJsonsrvPostStore } from "@/store/useJsonsrvPostStore";
 import { Post } from "@/types/posts";
 import { Folder, Folders, MessageCircle, Newspaper, User } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
+  const router = useRouter();
+  const pathname = usePathname();
   const fetchPosts = useJsonsrvPostStore((state) => state.fetchPosts);
   const posts = useJsonsrvPostStore((state) => state.posts);
 
@@ -18,8 +21,13 @@ export default function Dashboard() {
     fetchPosts();
   }, [fetchPosts]);
 
+  useEffect(() => {
+    router.replace(pathname);
+  }, [router, pathname]);
+
   return (
     <main className="">
+      <h1 className="mb-5">Welcome to the Admin Portal</h1>
       <div className="flex flex-col md:flex-row sm:flex-wrap justify-center gap-5 mb-5">
         <Link href={"/posts"}>
           <DashboardCard

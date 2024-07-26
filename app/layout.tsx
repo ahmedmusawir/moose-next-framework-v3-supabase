@@ -7,7 +7,7 @@ import { ThemeProvider } from "./providers/ThemeProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Moose Next Framework v1",
+  title: "Moose Next Framework v3",
   description: "This is just ui/ux framework with Shadcn",
 };
 
